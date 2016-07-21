@@ -27,7 +27,7 @@ pip install changepy
     [0, 100] # since data is random, sometimes it might be different, but most of the time there will be at most a couple more values around 100
 ```
 
-For more examples see [pelf_test.py](../blob/master/pelf_test.py)
+For more examples see [pelt_test.py](../blob/master/pelt_test.py)
 
 ## Reference
 

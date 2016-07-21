@@ -1,7 +1,10 @@
 """
 Setup script
 """
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 
 setup(
     name='changepy',
@@ -10,7 +13,7 @@ setup(
     author='Rui Gil',
     author_email='ruipgil@gmail.com',
     url='https://github.com/ruipgil/changepy',
-    packages=['distutils', 'distutils.command'],
+    packages=['changepy'],
     download_url='https://github.com/ruipgil/changepy/archive/master.zip',
     keywords=['changepoint', 'timeseries', 'time', 'series', 'math', 'stats', 'probabilities'],
     classifiers=[],
