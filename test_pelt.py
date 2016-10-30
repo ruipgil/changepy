@@ -4,7 +4,10 @@ Tests to the PELT module
 import unittest
 import numpy as np
 from changepy import pelt
-from changepy.costs import normal_var, normal_mean
+from changepy.costs import normal_var, normal_mean, normal_meanvar
+import matplotlib.pyplot as plt
+
+
 
 
 class PELTTests(unittest.TestCase):
@@ -80,6 +83,14 @@ class PELTTests(unittest.TestCase):
 
         result = pelt(normal_var(np.array(data), 0), len(data))
         self.assertEqual(result, [0, 5])
+
+    def test_pelt_normal_meanvar_big(self):
+        np.random.seed(1)
+        data = np.hstack((np.random.normal(0, 1, 100), np.random.normal(10, 10, 100)))
+        cost = normal_meanvar(data)
+        result = pelt(cost, len(data))
+        self.assertEqual(result, [0, 1, 3, 12, 14, 21, 25, 32, 35, 41, 43, 48, 51, 53, 55, 58, 66, 69, 71, 77, 80, 82, 86, 89, 91, 100, 139, 142, 145, 147, 150, 152, 155, 158, 162, 168, 173, 176, 187, 189, 196, 198])
+
 
 if __name__ == '__main__':
     unittest.main()

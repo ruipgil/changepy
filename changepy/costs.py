@@ -73,3 +73,37 @@ def normal_var(data, mean):
         return dist * np.log(diff/dist)
 
     return cost
+
+def normal_meanvar(data):
+    """ Creates a segment cost function for a time series with a
+        Normal distribution with changing mean and variance
+
+    Args:
+        data (:obj:`list` of float): 1D time series data
+    Returns:
+        function: Function with signature
+            (int, int) -> float
+            where the first arg is the starting index, and the second
+            is the last arg. Returns the cost of that segment
+    """
+    data = np.hstack(([0.0], np.array(data)))
+
+    cumm = np.cumsum(data)
+    cumm_sq = np.cumsum([val**2 for val in data])
+
+    def cost(s, t):
+        """ Cost function for normal distribution with variable variance
+
+        Args:
+            start (int): start index
+            end (int): end index
+        Returns:
+            float: Cost, from start to end
+        """
+        ts_i = 1.0 / (t-s)
+        mu = (cumm[t] - cumm[s]) * ts_i
+        sig = (cumm_sq[t] - cumm_sq[s]) * ts_i - mu**2
+        sig_i = 1.0 / sig
+        return (t-s) * np.log(sig) + (cumm_sq[t] - cumm_sq[s]) * sig_i - 2*(cumm[t] - cumm[s])*mu*sig_i + ((t-s)*mu**2)*sig_i
+
+    return cost
