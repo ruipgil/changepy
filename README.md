@@ -27,17 +27,18 @@ pip install changepy
     [0, 100] # since data is random, sometimes it might be different, but most of the time there will be at most a couple more values around 100
 ```
 
-For more examples see [pelt_test.py](../blob/master/pelt_test.py)
+For more examples see [pelf_test.py](./pelf_test.py)
 
 ## Reference
 
 Currently there is only one algorithm for changepoint evaluation, the PELT algorithm [1].
 
 
-The PERL algorithm requires a cost function. Currently there are two functions available through this library. However, you could implement your own, for your specific needs.
+The PERL algorithm requires a cost function. Currently there are three functions available through this library. However, you could implement your own, for your specific needs.
 Those functions are:
   + ``` normal_mean ```, which expects normal distributed data, with changing mean
-  + ``` normal_var ```, which expects normal distributed data, with changing var
+  + ``` normal_var ```, which expects normal distributed data, with changing variance
+  + ``` normal_meanvar ```, which expects normal distributed data, with changing mean and variance
 
 
 ## Other implementations
@@ -49,5 +50,5 @@ This is mostly a port from other libraries, most of all from [STOR-i's changepoi
 
 ## License
 
-[MIT](../blob/master/LICENSE)
+[MIT](./LICENSE)
 
