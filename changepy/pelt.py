@@ -1,5 +1,16 @@
 import numpy as np
 
+def find_min(arr, val=0.0):
+    """ Finds the minimum value and index
+
+    Args:
+        arr (np.array)
+        val (float, optional): value to add
+    Returns:
+        (float, int): minimum value and index
+    """
+    return min(arr) + val, np.argmin(arr)
+
 def pelt(cost, length, pen=None):
     """ PELT algorithm to compute changepoints in time series
 
@@ -24,43 +35,32 @@ def pelt(cost, length, pen=None):
     if pen is None:
         pen = np.log(length)
 
-    optimal_costs = np.zeros(length + 1)
-    optimal_costs[0] = -pen
+    F = np.zeros(length + 1)
+    R = np.array([0], dtype=np.int)
+    candidates = np.zeros(length + 1, dtype=np.int)
 
-    changepoints = np.zeros(length, dtype=np.int)
+    F[0] = -pen
 
-    candidates = [0]
+    for tstar in range(2, length + 1):
+        cpt_cands = R
+        seg_costs = np.zeros(len(cpt_cands))
+        for i in range(0, len(cpt_cands)):
+            seg_costs[i] = cost(cpt_cands[i], tstar)
 
-    for i in range(1, length):
-        costs = []
-        for candidate in candidates:
-            ccost = cost(candidate, i + 1)
-            costs.append(ccost)
+        F_cost = F[cpt_cands] + seg_costs
+        F[tstar], tau = find_min(F_cost, pen)
+        candidates[tstar] = cpt_cands[tau]
 
-        sel = optimal_costs[np.array(candidates, dtype=np.int)]
-        temp = np.add(sel, costs)
+        ineq_prune = [val < F[tstar] for val in F_cost]
+        R = [cpt_cands[j] for j, val in enumerate(ineq_prune) if val]
+        R.append(tstar - 1)
+        R = np.array(R, dtype=np.int)
 
-        # Since pen is a constant, we don't need to add it to all
-        # the element of the array, only to the min value
-        min_val = min(temp) + pen
-        min_idx = np.argmin(temp)
-
-        optimal_costs[i+1] = min_val
-        changepoints[i] = candidates[min_idx]
-
-        ineq_prune = [val < min_val for val in temp]
-        _candidates = []
-        for j, val in enumerate(ineq_prune):
-            if val:
-                _candidates.append(candidates[j])
-        candidates = _candidates
-
-        candidates.append(i)
-
-    last = changepoints[-1]
-    backtrack = [last]
+    last = candidates[-1]
+    changepoints = [last]
     while last > 0:
-        last = changepoints[last-1]
-        backtrack.append(last)
+        last = candidates[last]
+        changepoints.append(last)
 
-    return sorted(backtrack)
+    return sorted(changepoints)
+
