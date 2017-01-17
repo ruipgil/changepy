@@ -8,7 +8,7 @@ except ImportError:
 
 setup(
     name='changepy',
-    version='0.2',
+    version='0.3',
     description='Changepoint detection on time series, in Python',
     author='Rui Gil',
     author_email='ruipgil@gmail.com',

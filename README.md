@@ -39,11 +39,15 @@ Those functions are:
   + ``` normal_mean ```, which expects normal distributed data, with changing mean
   + ``` normal_var ```, which expects normal distributed data, with changing variance
   + ``` normal_meanvar ```, which expects normal distributed data, with changing mean and variance
+  + ``` poisson ```, which expect poisson distributed data, with changing mean
+  + ``` exponential ```, which expect exponential distributed data, with changing mean
 
+
+> Test with ``` python test_pelt.py ```
 
 ## Other implementations
 
-This is mostly a port from other libraries, most of all from [STOR-i's changepoint package for python](https://github.com/STOR-i/Changepoints.jl) and [rkillick cpt package for r](https://github.com/rkillick/changepoint/)
+This is mostly a port from other libraries, most of all from [STOR-i's changepoint package for julia](https://github.com/STOR-i/Changepoints.jl) and [rkillick cpt package for r](https://github.com/rkillick/changepoint/)
 
 
 [1]: Killick R, Fearnhead P, Eckley IA (2012) Optimal detection of changepoints with a linear computational cost, JASA 107(500), 1590-1598
