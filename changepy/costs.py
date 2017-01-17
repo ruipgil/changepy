@@ -107,3 +107,62 @@ def normal_meanvar(data):
         return (t-s) * np.log(sig) + (cumm_sq[t] - cumm_sq[s]) * sig_i - 2*(cumm[t] - cumm[s])*mu*sig_i + ((t-s)*mu**2)*sig_i
 
     return cost
+
+def poisson(data):
+    """ Creates a segment cost function for a time series with a
+        poisson distribution with changing mean
+
+    Args:
+        data (:obj:`list` of float): 1D time series data
+    Returns:
+        function: Function with signature
+            (int, int) -> float
+            where the first arg is the starting index, and the second
+            is the last arg. Returns the cost of that segment
+    """
+    data = np.hstack(([0.0], np.array(data)))
+    cumm = np.cumsum(data)
+
+    def cost(s, t):
+        """ Cost function for poisson distribution with changing mean
+
+        Args:
+            start (int): start index
+            end (int): end index
+        Returns:
+            float: Cost, from start to end
+        """
+        diff = cumm[t]-cumm[s]
+        if diff == 0:
+            return -float("Inf")
+        return -2 * diff * (np.log(diff) - np.log(t-s) - 1)
+
+    return cost
+
+def exponential(data):
+    """ Creates a segment cost function for a time series with a
+        exponential distribution with changing mean
+
+    Args:
+        data (:obj:`list` of float): 1D time series data
+    Returns:
+        function: Function with signature
+            (int, int) -> float
+            where the first arg is the starting index, and the second
+            is the last arg. Returns the cost of that segment
+    """
+    data = np.hstack(([0.0], np.array(data)))
+    cumm = np.cumsum(data)
+
+    def cost(s, t):
+        """ Cost function for exponential distribution with changing mean
+
+        Args:
+            start (int): start index
+            end (int): end index
+        Returns:
+            float: Cost, from start to end
+        """
+        return -1*(t-s) * (np.log(t-s) - np.log(cumm[t] - cumm[s]))
+
+    return cost
