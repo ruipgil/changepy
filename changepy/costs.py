@@ -134,8 +134,9 @@ def poisson(data):
         """
         diff = cumm[t]-cumm[s]
         if diff == 0:
-            return -float("Inf")
-        return -2 * diff * (np.log(diff) - np.log(t-s) - 1)
+            return -2 * diff * (- np.log(t-s) - 1)
+        else:
+            return -2 * diff * (np.log(diff) - np.log(t-s) - 1)
 
     return cost
 
