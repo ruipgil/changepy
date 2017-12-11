@@ -1,6 +1,6 @@
 import numpy as np
 
-def normal_mean(data, variance):
+def normal_mean(data):
     """ Creates a segment cost function for a time series with a
         Normal distribution with changing mean
 
@@ -16,12 +16,13 @@ def normal_mean(data, variance):
     if not isinstance(data, np.ndarray):
         data = np.array(data)
 
-    i_variance_2 = 1 / (variance ** 2)
+    #i_variance_2 = 1 / (variance ** 2)
     cmm = [0.0]
     cmm.extend(np.cumsum(data))
 
     cmm2 = [0.0]
-    cmm2.extend(np.cumsum(np.abs(data)))
+    #cmm2.extend(np.cumsum(np.abs(data))) Modified
+    cmm2.extend(np.cumsum(np.power(data,2)))
 
     def cost(start, end):
         """ Cost function for normal distribution with variable mean
@@ -35,8 +36,9 @@ def normal_mean(data, variance):
         cmm2_diff = cmm2[end] - cmm2[start]
         cmm_diff = pow(cmm[end] - cmm[start], 2)
         i_diff = end - start
-        diff = cmm2_diff - cmm_diff
-        return (diff/i_diff) * i_variance_2
+        diff = cmm2_diff - cmm_diff/i_diff  #modified
+        #return (diff/i_diff) * i_variance_2
+        return diff
 
     return cost
 

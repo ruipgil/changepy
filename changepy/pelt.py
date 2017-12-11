@@ -33,7 +33,7 @@ def pelt(cost, length, pen=None):
         (:obj:`list` of int): List with the indexes of changepoints
     """
     if pen is None:
-        pen = np.log(length)
+        pen = 2*np.log(length)  # modified
 
     F = np.zeros(length + 1)
     R = np.array([0], dtype=np.int)
