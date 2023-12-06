@@ -36,8 +36,8 @@ def pelt(cost, length, pen=None):
         pen = np.log(length)
 
     F = np.zeros(length + 1)
-    R = np.array([0], dtype=np.int)
-    candidates = np.zeros(length + 1, dtype=np.int)
+    R = np.array([0], dtype=np.int64)
+    candidates = np.zeros(length + 1, dtype=np.int64)
 
     F[0] = -pen
 
@@ -54,7 +54,7 @@ def pelt(cost, length, pen=None):
         ineq_prune = [val < F[tstar] for val in F_cost]
         R = [cpt_cands[j] for j, val in enumerate(ineq_prune) if val]
         R.append(tstar - 1)
-        R = np.array(R, dtype=np.int)
+        R = np.array(R, dtype=np.int64)
 
     last = candidates[-1]
     changepoints = [last]
